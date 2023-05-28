@@ -19,5 +19,5 @@ initWebRoute(app)
 connectDB()
 
 app.listen(port, () => {
-    console.log(`Web đang chạy ở địa chỉ http://localhost:${port}`);
+    console.log(`Server đang chạy ở địa chỉ http://localhost:${port}`);
 })

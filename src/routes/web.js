@@ -4,7 +4,9 @@ import homeControllers from '../controllers/homeControllers.js';
 let router = express.Router();
 
 let initWebRoute = (app) => {
-    router.get('/', homeControllers.getHomePage);
+    router.post('/', homeControllers.getHomePage);
+    router.get('/post', homeControllers.getPostPage)
+    router.post('/saveData', homeControllers.saveData)
     return app.use("/", router)
 }
 

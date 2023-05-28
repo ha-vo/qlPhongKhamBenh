@@ -10,10 +10,9 @@ module.exports = {
       lastName: "admin",
       address: "Can Tho",
       gender: 1,
-      typeRole: "ROLE",
-      keyRole: "R1",
+      roleId: 1,
       createdAt: new Date(),
-      updateAt: new Date(),
+      updatedAt: new Date(),
     }])
   },
 
