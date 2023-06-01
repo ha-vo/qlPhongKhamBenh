@@ -29,6 +29,17 @@ let getUser = async (req, res) => {
 
 }
 
+let deleteUser = async (req, res) => {
+    let id = req.params.id
+    if (id) {
+        let response = await userService.deleteUser(id)
+        res.send(response)
+    } else {
+        res.status(404).json("failed")
+    }
+
+}
+
 export default {
-    checkLogin, getUser
+    checkLogin, getUser, deleteUser
 }

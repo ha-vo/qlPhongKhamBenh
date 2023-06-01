@@ -1,6 +1,9 @@
 import db from "../models"
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 let handleUser = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -10,7 +13,7 @@ let handleUser = (email, password) => {
             if (checkEmailExist) {
                 let user = await db.User.findOne({ where: { email: email }, raw: true })
                 if (user) {
-                    let publicKey = fs.readFileSync('D:\\fullstack\\qlPhongKhamBenh\\src\\key\\rsa.public')
+                    let publicKey = fs.readFileSync(process.env.pathKey + ' rsa.public')
                     jwt.verify(user.password, publicKey, { algorithms: 'RS256' }, function (err, decode) {
                         if (err) {
                             userData.errno = 2
@@ -104,6 +107,34 @@ let getUser = (id) => {
     })
 }
 
+let deleteUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({ where: { id: id } })
+            if (user) {
+                db.User.destroy({
+                    where: {
+                        id: id
+                    }
+                })
+                resolve({
+                    errno: 0,
+                    errMessage: "User deleted"
+                })
+            } else {
+                resolve({
+                    errno: 2,
+                    errMessage: "Delete user failed because id is not exist"
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+
+    })
+}
+
 export default {
-    handleUser, getAllUser, getUser
+    handleUser, getAllUser, getUser,
+    deleteUser
 }

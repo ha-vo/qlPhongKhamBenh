@@ -5,8 +5,9 @@ import userControllers from '../controllers/userControllers.js';
 let router = express.Router();
 
 let initUserRoute = (app) => {
-    router.post('/', userControllers.checkLogin);
+    router.post('/', userControllers.checkLogin)
     router.get('/:option', userControllers.getUser)
+    router.delete('/:id', userControllers.deleteUser)
     return app.use("/api/user", router)
 }
 
