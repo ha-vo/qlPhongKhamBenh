@@ -40,6 +40,21 @@ let deleteUser = async (req, res) => {
 
 }
 
+let editUser = async (req, res) => {
+    let id = req.params.id
+    let data = req.body
+    if (id) {
+        let user = await userService.editUser(id, data)
+        res.send(user)
+    } else {
+        res.status(404).json("Id is not found")
+    }
+
+
+
+}
+
 export default {
-    checkLogin, getUser, deleteUser
+    checkLogin, getUser, deleteUser,
+    editUser
 }

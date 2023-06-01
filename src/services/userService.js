@@ -134,7 +134,34 @@ let deleteUser = (id) => {
     })
 }
 
+let editUser = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({ where: { id: id } })
+            if (user) {
+                user.email = data.email
+                user.firstName = data.firstName
+                user.lastName = data.lastName
+                user.address = data.address
+                user.phoneNumber = data.phoneNumber
+                await user.save()
+                resolve({
+                    errno: 0,
+                    errMessage: "Update user successfully"
+                })
+            } else {
+                resolve({
+                    errno: 1,
+                    errMessage: "Update user unsuccessfully"
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 export default {
     handleUser, getAllUser, getUser,
-    deleteUser
+    deleteUser, editUser
 }

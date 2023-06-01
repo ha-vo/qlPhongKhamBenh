@@ -8,6 +8,7 @@ let initUserRoute = (app) => {
     router.post('/', userControllers.checkLogin)
     router.get('/:option', userControllers.getUser)
     router.delete('/:id', userControllers.deleteUser)
+    router.put('/:id', userControllers.editUser)
     return app.use("/api/user", router)
 }
 
