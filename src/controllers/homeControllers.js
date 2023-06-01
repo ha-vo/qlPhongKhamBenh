@@ -3,13 +3,7 @@ import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import db from '../models/index.js'
 
-let getHomePage = async (req, res) => {
-    let email = req.body.email
-    let password = req.body.password
-    let data = await userService.handleUser(email, password)
-    res.send(data)
 
-}
 
 let getPostPage = (req, res) => {
     res.render('post')
@@ -31,5 +25,5 @@ let saveData = async (req, res) => {
 }
 
 export default {
-    getHomePage, getPostPage, saveData
+    getPostPage, saveData
 }
