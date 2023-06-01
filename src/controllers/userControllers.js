@@ -2,6 +2,9 @@ import userService from '../services/userService.js'
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import db from '../models/index.js'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 let checkLogin = async (req, res) => {
     let email = req.body.email
@@ -54,7 +57,14 @@ let editUser = async (req, res) => {
 
 }
 
+let createUser = async (req, res) => {
+    let data = req.body
+    let user = await userService.createUser(data)
+
+    if (user) res.send(data)
+    else res.status(404).json("createUser unsuccessful")
+}
 export default {
     checkLogin, getUser, deleteUser,
-    editUser
+    editUser, createUser
 }

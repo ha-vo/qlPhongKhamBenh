@@ -9,21 +9,8 @@ let getPostPage = (req, res) => {
     res.render('post')
 }
 
-let saveData = async (req, res) => {
-    let data = req.body
-    let privateKey = fs.readFileSync(process.env.pathKey + 'rsa.private')
-    try {
-        let token = jwt.sign({ "password": data.password }, privateKey, { algorithm: 'RS256' })
-        data.password = token
-        var user = await db.User.create(data)
-    } catch (err) {
-        console.log(err)
-    }
 
-    if (user) res.send("Create new user successfully")
-    else res.send("create new user failed")
-}
 
 export default {
-    getPostPage, saveData
+    getPostPage
 }

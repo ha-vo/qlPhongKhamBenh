@@ -2,6 +2,7 @@ import db from "../models"
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import * as dotenv from 'dotenv'
+import { resolve } from "path"
 
 dotenv.config()
 
@@ -13,7 +14,7 @@ let handleUser = (email, password) => {
             if (checkEmailExist) {
                 let user = await db.User.findOne({ where: { email: email }, raw: true })
                 if (user) {
-                    let publicKey = fs.readFileSync(process.env.pathKey + ' rsa.public')
+                    let publicKey = fs.readFileSync(process.env.pathKey + 'rsa.public')
                     jwt.verify(user.password, publicKey, { algorithms: 'RS256' }, function (err, decode) {
                         if (err) {
                             userData.errno = 2
@@ -161,7 +162,31 @@ let editUser = (id, data) => {
     })
 }
 
+let createUser = (data) => {
+    return new Promise(async (resolve, reject) => {
+        let privateKey = fs.readFileSync(process.env.pathKey + 'rsa.private')
+        try {
+            let token = jwt.sign({ "password": data.password }, privateKey, { algorithm: 'RS256' })
+            data.password = token
+            var user = await db.User.create(data)
+            if (user) {
+                resolve({
+                    errno: 0,
+                    errMessage: "create user successfully"
+                })
+            } else {
+                resolve({
+                    errno: 1,
+                    errMessage: "create user unsuccessfully"
+                })
+            }
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
 export default {
     handleUser, getAllUser, getUser,
-    deleteUser, editUser
+    deleteUser, editUser, createUser
 }
