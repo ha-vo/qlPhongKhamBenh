@@ -2,7 +2,6 @@ import db from "../models"
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import * as dotenv from 'dotenv'
-import { resolve } from "path"
 
 dotenv.config()
 
@@ -52,7 +51,9 @@ let checkEmail = (email) => {
     return new Promise(async (resolve, reject) => {
         try {
             let data = await db.User.findOne({ where: { email: email } })
-            if (data) resolve(true)
+            if (data) {
+                resolve(true)
+            }
             else resolve(false)
         } catch (e) {
             reject(e);
@@ -166,20 +167,29 @@ let createUser = (data) => {
     return new Promise(async (resolve, reject) => {
         let privateKey = fs.readFileSync(process.env.pathKey + 'rsa.private')
         try {
-            let token = jwt.sign({ "password": data.password }, privateKey, { algorithm: 'RS256' })
-            data.password = token
-            var user = await db.User.create(data)
-            if (user) {
+            let checkEmailExist = checkEmail(data.email)
+            if (checkEmailExist) {
                 resolve({
-                    errno: 0,
-                    errMessage: "create user successfully"
+                    errno: 4,
+                    errMessage: "email already exists. plz try again with other email",
                 })
             } else {
-                resolve({
-                    errno: 1,
-                    errMessage: "create user unsuccessfully"
-                })
+                let token = jwt.sign({ "password": data.password }, privateKey, { algorithm: 'RS256' })
+                data.password = token
+                var user = await db.User.create(data)
+                if (user) {
+                    resolve({
+                        errno: 0,
+                        errMessage: "create user successfully"
+                    })
+                } else {
+                    resolve({
+                        errno: 1,
+                        errMessage: "create user unsuccessfully"
+                    })
+                }
             }
+
         } catch (err) {
             reject(err)
         }

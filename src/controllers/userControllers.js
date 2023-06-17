@@ -53,15 +53,13 @@ let editUser = async (req, res) => {
         res.status(404).json("Id is not found")
     }
 
-
-
 }
 
 let createUser = async (req, res) => {
     let data = req.body
     let user = await userService.createUser(data)
 
-    if (user) res.send(data)
+    if (user) res.send(user)
     else res.status(404).json("createUser unsuccessful")
 }
 export default {

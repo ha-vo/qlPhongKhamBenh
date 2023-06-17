@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import viewEngine from './config/viewEngine.js'
 import initWebRoute from './routes/web.js'
 import initUserRoute from './routes/user.js'
+import initAllCodeRouter from './routes/allcode.js'
 import * as dotenv from 'dotenv'
 import connectDB from './config/connectDB.js'
 import cors from 'cors'
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 viewEngine(app)
 initWebRoute(app)
 initUserRoute(app)
+initAllCodeRouter(app)
 
 connectDB()
 
